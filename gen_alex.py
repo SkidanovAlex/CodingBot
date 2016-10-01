@@ -25,7 +25,23 @@ def gen_one(complexity = 4):
         op = random.choice(["+", "-", "*"])
         xs, xg = gen_one(complexity - 1)
         ys, yg = gen_one(complexity - 1)
-        return "(%s %s %s)" % (xs, op, ys), BinaryOp(op, xg, yg)
+
+        dtype = random.choice(["raw", "prefix", "infix1", "infix2"])
+        if dtype == "raw":
+            descr = "(%s %s %s)" % (xs, op, ys)
+        elif dtype == "prefix":
+            op_s = {'+': 'sum', '-': 'difference', '*': 'product'}[op]
+            descr = "(%s of %s and %s)" % (op_s, xs, ys)
+        elif dtype == "infix1":
+            op_s = {'+': 'plus', '-': 'minus', '*': 'multiplied by'}[op]
+            descr = "(%s %s %s)" % (xs, op_s, ys)
+        elif dtype == "infix2":
+            op_s = {'+': 'added to', '-': 'subtracted from', '*': 'multiplied by'}[op]
+            descr = "(%s %s %s)" % (ys, op_s, xs)
+        else:
+            assert False, dtype
+
+        return descr, BinaryOp(op, xg, yg)
 
     if what == "simple2":
         op = random.choice(["+", "-", "*"])
