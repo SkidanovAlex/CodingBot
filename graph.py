@@ -69,7 +69,9 @@ class If(Node):
         cc, ca = self.cond.to_python()
         tc, ta = self.then.to_python()
         ec, ea = self.else_.to_python()
-        return cc + ["if %s:" % ca] + self.indent(tc) + ["else:"] + self.indent(ec), "%s if (%s) else %s" % (ta, ca, ea)
+        else_block =  (["else:"] + self.indent(ec)) if len(ec) else []
+        if_block = (["if %s:" % ca] + self.indent(tc) + else_block) if len(ec) or len(tc) else []
+        return cc + if_block, "%s if (%s) else %s" % (ta, ca, ea)
 
 
 class While(Node):
